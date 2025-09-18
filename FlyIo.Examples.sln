@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36511.14 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlyIo.Examples", "FlyIo.Examples\FlyIo.Examples.csproj", "{B54A27FC-5516-CBBF-0ED4-DC8BEB03106C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlyIo.Examples.Tests", "FlyIo.Examples.Tests\FlyIo.Examples.Tests.csproj", "{7CB1D0EF-3259-4D07-D062-B9DB7B1CACF3}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B54A27FC-5516-CBBF-0ED4-DC8BEB03106C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54A27FC-5516-CBBF-0ED4-DC8BEB03106C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54A27FC-5516-CBBF-0ED4-DC8BEB03106C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54A27FC-5516-CBBF-0ED4-DC8BEB03106C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CB1D0EF-3259-4D07-D062-B9DB7B1CACF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CB1D0EF-3259-4D07-D062-B9DB7B1CACF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CB1D0EF-3259-4D07-D062-B9DB7B1CACF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CB1D0EF-3259-4D07-D062-B9DB7B1CACF3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
