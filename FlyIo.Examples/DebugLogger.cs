@@ -24,7 +24,7 @@ internal class DebugLogger : IDebugLogger
         if (!_isEnabled)
             return;
 
-        _log = File.Create($@"D:\Sources\TestingSolution\FlyIo.Examples\{Guid.NewGuid()}-log.txt");
+        _log = File.Create($@"D:\Sources\FlyIo.Examples\FlyIo.Examples\{Guid.NewGuid()}-log.txt");
     }
 
     public async Task Log(string line)

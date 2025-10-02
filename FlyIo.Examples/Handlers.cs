@@ -1,8 +1,9 @@
-﻿namespace FlyIo.Examples;
+﻿using FlyIo.Examples.Models;
+
+namespace FlyIo.Examples;
 
 internal static class Handlers
 {
-    // init -> init_ok
     public static Func<Envelope, Task> HandleInit(MaelstromNode node) => async req =>
     {
         node.NodeId = req.Body.NodeId;
@@ -10,8 +11,7 @@ internal static class Handlers
 
         await node.ReplyAsync(req, new { type = "init_ok" });
     };
-
-    // echo -> echo_ok (echo field must be mirrored back)
+       
     public static Func<Envelope, Task> HandleEcho(MaelstromNode node) => async req =>
     {
         await node.ReplyAsync(req, new { type = "echo_ok", echo = req.Body.Echo });
@@ -40,7 +40,7 @@ internal static class Handlers
         await node.ReplyAsync(req, new { type = "topology_ok" });
     };
 
-    public static Func<Envelope, Task> HandleRead(MaelstromNode node) => async req =>
+    public static Func<Envelope, Task> HandleReadBroadcast(MaelstromNode node) => async req =>
     {
         await node.ReplyAsync(req, new { type = "read_ok", messages = node.Messages.ToArray() });
     };
@@ -55,12 +55,23 @@ internal static class Handlers
         await node.ReplyAsync(req, new { type = "generate_ok", id = Guid.NewGuid().ToString() });
     };
 
+    public static Func<Envelope, Task> HandleReadCounter(MaelstromNode node) => async req =>
+    {
+        await node.ReplyAsync(req, new { type = "read_ok", value = node.Counter });
+    };
+
+    public static Func<Envelope, Task> HandleAddCounter(MaelstromNode node) => async req =>
+    {
+        node.SetCounter(req.Body.Delta ?? 0);
+        await node.ReplyAsync(req, new { type = "add_ok" });
+    };
+
     private static string[] GetNodes(Envelope req, string name)
     {
         var topology = req.Body.Topology.Value;
         var topologyType = typeof(Topology);
         var property = topologyType.GetProperty(name);
-    
+
         return property?.GetValue(topology) as string[] ?? Array.Empty<string>();
     }
 }

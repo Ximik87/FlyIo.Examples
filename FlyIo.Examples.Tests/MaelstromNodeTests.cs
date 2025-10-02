@@ -92,14 +92,54 @@ public class MaelstromNodeTests
         moq.SetupSequence(m => m.ReadLineAsync())
             .ReturnsAsync(request)
             .ReturnsAsync((string?)null);
-        string expected = "{\"src\":\"n4\",\"dest\":\"c5\",\"body\":{\"type\":\"read_ok\",\"in_reply_to\":7,\"messages\":[122]}}";
+        string expected =
+            "{\"src\":\"n4\",\"dest\":\"c5\",\"body\":{\"type\":\"read_ok\",\"in_reply_to\":7,\"messages\":[122]}}";
         var sut = new MaelstromNode(moq.Object, Mock.Of<IDebugLogger>());
         sut.AddMessage(122);
-        sut.On("read", Handlers.HandleRead(sut));
+        sut.On("read", Handlers.HandleReadBroadcast(sut));
+
         // Act
         await sut.RunAsync();
 
         moq.Verify(x => x.WriteLine(expected));
         Assert.NotEmpty(sut.Messages);
+    }
+
+    [Fact]
+    public async Task AddCounter_Test()
+    {
+        var request = "{\"id\":4,\"src\":\"c2\",\"dest\":\"n0\",\"body\":{\"delta\":4,\"type\":\"add\",\"msg_id\":2}}";
+        var moq = new Mock<IStdIoProcessor>();
+        moq.SetupSequence(m => m.ReadLineAsync())
+            .ReturnsAsync(request)
+            .ReturnsAsync((string?)null);
+        var sut = new MaelstromNode(moq.Object, Mock.Of<IDebugLogger>());
+        string expected = "{\"src\":\"n0\",\"dest\":\"c2\",\"body\":{\"type\":\"add_ok\",\"in_reply_to\":2}}";
+        sut.On("add", Handlers.HandleAddCounter(sut));
+
+        // Act
+        await sut.RunAsync();
+
+        moq.Verify(x => x.WriteLine(expected));
+        Assert.Equal(4, sut.Counter);
+    }
+
+    [Fact]
+    public async Task ReadCounter_Test()
+    {
+        var request = "{\"id\":6,\"src\":\"c2\",\"dest\":\"n0\",\"body\":{\"type\":\"read\",\"msg_id\":3}}";
+        var moq = new Mock<IStdIoProcessor>();
+        moq.SetupSequence(m => m.ReadLineAsync())
+            .ReturnsAsync(request)
+            .ReturnsAsync((string?)null);
+        var sut = new MaelstromNode(moq.Object, Mock.Of<IDebugLogger>());
+        string expected = "{\"src\":\"n0\",\"dest\":\"c2\",\"body\":{\"type\":\"read_ok\",\"in_reply_to\":3,\"value\":6}}";
+        sut.SetCounter(6);
+        sut.On("read", Handlers.HandleReadCounter(sut));
+
+        // Act
+        await sut.RunAsync();
+
+        moq.Verify(x => x.WriteLine(expected));
     }
 }

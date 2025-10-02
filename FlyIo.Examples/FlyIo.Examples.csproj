@@ -9,7 +9,7 @@
   
   <ItemGroup>
     <InternalsVisibleTo Include="FlyIo.Examples.Tests" />
-    <InternalsVisibleTo Include ="DynamicProxyGenAssembly2" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
 </Project>

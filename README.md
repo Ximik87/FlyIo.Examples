@@ -26,3 +26,10 @@ java -jar maelstrom.jar  test -w broadcast --bin "FlyIo.Examples\FlyIo.Examples\
 Broadcast for multi node
 
 java -jar maelstrom.jar  test -w broadcast --bin "FlyIo.Examples\FlyIo.Examples\bin\Debug\net8.0\FlyIo.Examples.exe" --node-count 5 --time-limit 20 --rate 10
+
+
+**Challenge #4** (failed)
+
+Grow-Only Counter
+
+java -jar maelstrom.jar  test -w g-counter --bin "FlyIo.Examples\FlyIo.Examples\bin\Debug\net8.0\FlyIo.Examples.exe" --node-count 3 --rate 100 --time-limit 20 --nemesis partition

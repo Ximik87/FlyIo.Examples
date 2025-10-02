@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using System.Xml.Linq;
 using FlyIo.Examples;
+using FlyIo.Examples.Models;
 
 internal sealed class MaelstromNode
 {
@@ -11,10 +12,12 @@ internal sealed class MaelstromNode
     private readonly object _stdoutLock = new();
     private readonly List<int> messages = new();
     private int _nextMsgId = 1;
+    private int _counter;
     public string NodeId { get; set; } = "";
     public IReadOnlyList<string> Peers { get; set; } = Array.Empty<string>();
     public IReadOnlyList<string> ForBroadcast { get; set; } = Array.Empty<string>();
     public IReadOnlyList<int> Messages => messages.AsReadOnly();
+    public int Counter => _counter;
 
     public void On(string type, Func<Envelope, Task> handler)
         => _handlers[type] = handler;
@@ -36,6 +39,16 @@ internal sealed class MaelstromNode
     public void AddMessage(int message)
     {
         messages.Add(message);
+    }
+
+    public void SetCounter(int value)
+    {
+        int initial, computed;
+        do
+        {
+            initial = _counter;
+            computed = initial + value;
+        } while (initial != Interlocked.CompareExchange(ref _counter, computed, initial));
     }
 
     public async Task RunAsync()
